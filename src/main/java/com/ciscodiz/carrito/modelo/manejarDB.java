@@ -33,18 +33,33 @@ public class manejarDB {
         return lista;
     }
 
+    public static List<Pedidos> obtenerPedidos() {
+        EntityManager em = crearEntityManager();
+        List<Pedidos> lista = em.createNamedQuery(
+                "Pedidos.findAll", Pedidos.class).getResultList();
+        return lista;
+    }
+
+    public static List<Clientes> obtenerClientes() {
+        EntityManager em = crearEntityManager();
+        List<Clientes> lista = em.createNamedQuery(
+                "Clientes.findAll", Clientes.class).getResultList();
+        return lista;
+    }
+
+    public static List<DetallePedidos> obtenerDetallesPedidos() {
+        EntityManager em = crearEntityManager();
+        List<DetallePedidos> lista = em.createNamedQuery(
+                "DetallesPedidos.findAll", DetallePedidos.class).getResultList();
+        return lista;
+    }
+    
     public void insertarProducto(Productos p) {
         EntityManager em = crearEntityManager();
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            em.createNativeQuery(
-                    "INSERT INTO PRODUCTOS (id, nombre, precio, cantidad) VALUES (?,?,?,?)")
-                    .setParameter(1, p.getId())
-                    .setParameter(2, p.getNombre())
-                    .setParameter(3, p.getPrecio())
-                    .setParameter(4, p.getCantidad())
-                    .executeUpdate();
+            em.persist(p);
             et.commit();
         } catch (Exception e) {
             et.rollback();
@@ -52,35 +67,38 @@ public class manejarDB {
 
     }
 
+    
+    
     public void insertarCliente(Clientes c) {
         EntityManager em = crearEntityManager();
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            em.createNativeQuery(
-                    "INSERT INTO CLIENTES (id, nombre, apellido1, apellido2) VALUES (?,?,?,?)")
-                    .setParameter(1, c.getId())
-                    .setParameter(2, c.getNombre())
-                    .setParameter(3, c.getApellido1())
-                    .setParameter(4, c.getApellido2())
-                    .executeUpdate();
+            em.persist(c);
             et.commit();
         } catch (Exception e) {
             et.rollback();
         }
     }
 
-    public void insertarPedido(Pedidos p, Clientes c) {
+    public void insertarPedido(Pedidos p) {
         EntityManager em = crearEntityManager();
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            em.createNativeQuery(
-                    "INSERT INTO PEDIDOS (id, fecha, idCliente) VALUES (?,?,?)")
-                    .setParameter(1, p.getId())
-                    .setParameter(2, p.getFecha())
-                    .setParameter(3, c.getId())
-                    .executeUpdate();
+            em.persist(p);
+            et.commit();
+        } catch (Exception e) {
+            et.rollback();
+        }
+    }
+
+    public void insertarDetallesPedido(DetallePedidos dp) {
+        EntityManager em = crearEntityManager();
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            em.persist(dp);
             et.commit();
         } catch (Exception e) {
             et.rollback();
